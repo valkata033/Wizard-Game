@@ -17,6 +17,10 @@ let game = {
     movingMultiplier: 3,
 };
 
+let scene = {
+    score: 0,
+};
+
 const availableKeys = ['KeyA', 'KeyD', 'KeyW', 'KeyS', 'Space'];
 
 gameStartElement.addEventListener('click', (e) => {
@@ -47,6 +51,8 @@ function onKeyUp(e) {
 
 function GameAction() {
     const wizard = document.querySelector('.wizard');
+    const points = document.querySelector('.points');
+    scene.score++;
 
     let isInAir = (player.y + player.height) <= gameAreaElement.offsetHeight;
 
@@ -69,6 +75,8 @@ function GameAction() {
 
     wizard.style.top = player.y + 'px';
     wizard.style.left = player.x + 'px';
+
+    points.textContent = scene.score;
 
     window.requestAnimationFrame(GameAction);
 }
