@@ -19,11 +19,13 @@ let game = {
     fireBallMultiplier: 5,
     fireInterval: 1000,
     clouldSpawnInterval: 3000,
+    bugSpawnInterval: 1000,
 };
 
 let scene = {
     score: 0,
     lastClouldSpawn: 0,
+    lastBugSpawn: 0,
 };
 
 const availableKeys = ['KeyA', 'KeyD', 'KeyW', 'KeyS', 'Space'];
@@ -104,7 +106,7 @@ function GameAction(timestamp) {
 
     // add clouds
     if (timestamp - scene.lastClouldSpawn > game.clouldSpawnInterval + 20000 * Math.random()) {
-        const cloud = document.createElement('div');
+        let cloud = document.createElement('div');
         cloud.classList.add('cloud');
         cloud.x = gameAreaElement.offsetWidth - 200;
         cloud.style.left = cloud.x + 'px';
@@ -123,6 +125,28 @@ function GameAction(timestamp) {
         }
     });
 
+    // add bugs
+    if(timestamp - scene.lastBugSpawn > game.bugSpawnInterval + 5000 * Math.random()){
+        let bug = document.createElement('div');
+        bug.classList.add('bug');
+        bug.x = gameAreaElement.offsetWidth - 60;
+        bug.style.left = bug.x + 'px';
+        bug.style.top = (gameAreaElement.offsetHeight - 60) * Math.random() + 'px';
+        gameAreaElement.appendChild(bug);
+        scene.lastBugSpawn = timestamp;
+    }
+
+    // add bugs movement
+    let bugs = document.querySelectorAll('.bug');
+    bugs.forEach(bug => {
+        bug.x -= game.speed * 4;
+        bug.style.left = bug.x + 'px';
+
+        if(bug.x + bug.offsetWidth <= 0){
+            bug.parentElement.removeChild(bug);
+        }
+    });
+
     points.textContent = scene.score;
 
     window.requestAnimationFrame(GameAction);
@@ -138,11 +162,4 @@ function addFireBall(player) {
 
     gameAreaElement.appendChild(fireBall);
 }
-
-
-
-
-
-
-
 

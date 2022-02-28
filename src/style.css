@@ -67,3 +67,11 @@ body {
     height: 200px;
     z-index: 0;
 }
+
+.bug {
+    background-image: url(./images/bug.png);
+    background-size: cover;
+    width: 60px;
+    height: 60px;
+    position: absolute;
+}
