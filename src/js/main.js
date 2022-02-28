@@ -167,6 +167,22 @@ function GameAction(timestamp) {
         });
     });
 
+    if(Number(points.textContent) > 10000 && Number(points.textContent) < 20000){
+        game.bugSpawnInterval = 800;
+    }
+    if(Number(points.textContent) > 20000 && Number(points.textContent) < 30000){
+        game.bugSpawnInterval = 600;
+    }
+    if(Number(points.textContent) > 30000 && Number(points.textContent) < 40000){
+        game.bugSpawnInterval = 400;
+    }
+    if(Number(points.textContent) > 40000 && Number(points.textContent) < 50000){
+        game.bugSpawnInterval = 300;
+    }
+    if(Number(points.textContent) > 50000){
+        game.bugSpawnInterval = 150;
+    }
+
     points.textContent = scene.score;
 
     if(scene.isActiveGame){
