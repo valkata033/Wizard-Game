@@ -10,12 +10,14 @@ let player = {
     y: 100,
     width: 0,
     height: 0,
+    lastTimeFiredFireball: 0,
 };
 
 let game = {
     speed: 2,
     movingMultiplier: 4,
     fireBallMultiplier: 5,
+    fireInterval: 1000,
 };
 
 let scene = {
@@ -50,7 +52,7 @@ function onKeyUp(e) {
     keys[e.code] = false;
 }
 
-function GameAction() {
+function GameAction(timestamp) {
     const wizard = document.querySelector('.wizard');
     const points = document.querySelector('.points');
     const fireBalls = document.querySelectorAll('.fire-ball');
@@ -75,9 +77,10 @@ function GameAction() {
         player.x += game.speed * game.movingMultiplier;
     }
 
-    if(keys.Space){
+    if(keys.Space && timestamp - player.lastTimeFiredFireball > game.fireInterval){
         wizard.classList.add('wizard-fire');
         addFireBall(player);
+        player.lastTimeFiredFireball = timestamp;
     }
     else{
         wizard.classList.remove('wizard-fire');
