@@ -26,6 +26,7 @@ let scene = {
     score: 0,
     lastClouldSpawn: 0,
     lastBugSpawn: 0,
+    isActiveGame: true,
 };
 
 const availableKeys = ['KeyA', 'KeyD', 'KeyW', 'KeyS', 'Space'];
@@ -145,11 +146,17 @@ function GameAction(timestamp) {
         if(bug.x + bug.offsetWidth <= 0){
             bug.parentElement.removeChild(bug);
         }
+
+        if(isCollision(wizard, bug)){
+            gameOverAction();
+        }
     });
 
     points.textContent = scene.score;
 
-    window.requestAnimationFrame(GameAction);
+    if(scene.isActiveGame){
+        window.requestAnimationFrame(GameAction);
+    }
 }
 
 function addFireBall(player) {
@@ -163,3 +170,17 @@ function addFireBall(player) {
     gameAreaElement.appendChild(fireBall);
 }
 
+function isCollision(firstElement, secondElement){
+    let firstRect = firstElement.getBoundingClientRect();
+    let secondRect = secondElement.getBoundingClientRect();
+
+    return !(firstRect.top > secondRect.bottom || 
+             firstRect.bottom < secondRect.top ||
+             firstRect.right < secondRect.left ||
+             firstRect.left > secondRect.right);
+}
+
+function gameOverAction(){
+    scene.isActiveGame = false;
+    gameOverElement.classList.remove('hide');
+}
