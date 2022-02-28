@@ -73,12 +73,31 @@ function GameAction() {
         player.x += game.speed * game.movingMultiplier;
     }
 
+    if(keys.Space){
+        wizard.classList.add('wizard-fire');
+        addFireBall(player);
+    }
+    else{
+        wizard.classList.remove('wizard-fire');
+    }
+
     wizard.style.top = player.y + 'px';
     wizard.style.left = player.x + 'px';
 
     points.textContent = scene.score;
 
     window.requestAnimationFrame(GameAction);
+}
+
+function addFireBall(player){
+    let fireBall = document.createElement('div');
+    fireBall.classList.add('fire-ball');
+
+    fireBall.style.top = (player.y + player.height / 3 - 5) + 'px';
+    fireBall.x = player.x + player.width;
+    fireBall.style.left = fireBall.x + 'px';
+    
+    gameAreaElement.appendChild(fireBall);
 }
 
 
