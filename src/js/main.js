@@ -21,6 +21,7 @@ let game = {
     clouldSpawnInterval: 3000,
     bugSpawnInterval: 1000,
     bugKillBonus: 2000,
+    bugKilled: 0,
 };
 
 let scene = {
@@ -59,8 +60,9 @@ function onKeyUp(e) {
 }
 
 function GameAction(timestamp) {
-    const wizard = document.querySelector('.wizard');
-    const points = document.querySelector('.points');
+    let wizard = document.querySelector('.wizard');
+    let points = document.querySelector('.points');
+    let killedBugs = document.querySelector('.killed-bugs-points');
 
     scene.score++;
 
@@ -148,15 +150,19 @@ function GameAction(timestamp) {
             bug.parentElement.removeChild(bug);
         }
 
+        // check for collision and end the game 
         if(isCollision(wizard, bug)){
             gameOverAction();
         }
 
+        // check for collision and remove elements
         fireBalls.forEach(ball => {
             if(isCollision(ball, bug)){
                 scene.score += game.bugKillBonus;
                 ball.parentElement.removeChild(ball);
                 bug.parentElement.removeChild(bug);
+                game.bugKilled++
+                killedBugs.textContent = game.bugKilled;
             }
         });
     });
