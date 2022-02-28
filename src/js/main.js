@@ -14,7 +14,8 @@ let player = {
 
 let game = {
     speed: 2,
-    movingMultiplier: 3,
+    movingMultiplier: 4,
+    fireBallMultiplier: 5,
 };
 
 let scene = {
@@ -52,6 +53,7 @@ function onKeyUp(e) {
 function GameAction() {
     const wizard = document.querySelector('.wizard');
     const points = document.querySelector('.points');
+    const fireBalls = document.querySelectorAll('.fire-ball');
     scene.score++;
 
     let isInAir = (player.y + player.height) <= gameAreaElement.offsetHeight;
@@ -84,6 +86,15 @@ function GameAction() {
     wizard.style.top = player.y + 'px';
     wizard.style.left = player.x + 'px';
 
+    fireBalls.forEach(ball => {
+        ball.x += game.speed * game.fireBallMultiplier;
+        ball.style.left = ball.x + 'px';
+
+        if(ball.x + ball.offsetWidth > gameAreaElement.offsetWidth){
+            ball.parentElement.removeChild(ball);
+        }
+    });
+
     points.textContent = scene.score;
 
     window.requestAnimationFrame(GameAction);
@@ -96,7 +107,7 @@ function addFireBall(player){
     fireBall.style.top = (player.y + player.height / 3 - 5) + 'px';
     fireBall.x = player.x + player.width;
     fireBall.style.left = fireBall.x + 'px';
-    
+
     gameAreaElement.appendChild(fireBall);
 }
 
