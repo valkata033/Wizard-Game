@@ -20,6 +20,7 @@ let game = {
     fireInterval: 1000,
     clouldSpawnInterval: 3000,
     bugSpawnInterval: 1000,
+    bugKillBonus: 2000,
 };
 
 let scene = {
@@ -150,6 +151,14 @@ function GameAction(timestamp) {
         if(isCollision(wizard, bug)){
             gameOverAction();
         }
+
+        fireBalls.forEach(ball => {
+            if(isCollision(ball, bug)){
+                scene.score += game.bugKillBonus;
+                ball.parentElement.removeChild(ball);
+                bug.parentElement.removeChild(bug);
+            }
+        });
     });
 
     points.textContent = scene.score;

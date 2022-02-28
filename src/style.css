@@ -28,6 +28,17 @@ body {
     cursor: pointer;
 }
 
+.game-over {
+    position: absolute;
+    width: 50%;
+    top: 100px;
+    left: 25%;
+    background-color: red;
+    text-align: center;
+    z-index: 1;
+    padding: 30px;
+}
+
 .game-score {
     background-color: black;
     color: white;
