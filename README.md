@@ -1,2 +1,2 @@
 # Wizard-Game
-JS-Advanced Wizard Game - WorkShop
+JS-Advanced Wizard Game - WorkShop @ SoftUni
