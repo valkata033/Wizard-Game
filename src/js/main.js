@@ -18,10 +18,12 @@ let game = {
     movingMultiplier: 4,
     fireBallMultiplier: 5,
     fireInterval: 1000,
+    clouldSpawnInterval: 3000,
 };
 
 let scene = {
     score: 0,
+    lastClouldSpawn: 0,
 };
 
 const availableKeys = ['KeyA', 'KeyD', 'KeyW', 'KeyS', 'Space'];
@@ -55,12 +57,12 @@ function onKeyUp(e) {
 function GameAction(timestamp) {
     const wizard = document.querySelector('.wizard');
     const points = document.querySelector('.points');
-    const fireBalls = document.querySelectorAll('.fire-ball');
+
     scene.score++;
 
     let isInAir = (player.y + player.height) <= gameAreaElement.offsetHeight;
 
-    if(isInAir){
+    if (isInAir) {
         player.y += game.speed;
     }
 
@@ -77,24 +79,47 @@ function GameAction(timestamp) {
         player.x += game.speed * game.movingMultiplier;
     }
 
-    if(keys.Space && timestamp - player.lastTimeFiredFireball > game.fireInterval){
+    if (keys.Space && timestamp - player.lastTimeFiredFireball > game.fireInterval) {
         wizard.classList.add('wizard-fire');
         addFireBall(player);
         player.lastTimeFiredFireball = timestamp;
     }
-    else{
+    else {
         wizard.classList.remove('wizard-fire');
     }
 
     wizard.style.top = player.y + 'px';
     wizard.style.left = player.x + 'px';
 
+    // add fireballs
+    const fireBalls = document.querySelectorAll('.fire-ball');
     fireBalls.forEach(ball => {
         ball.x += game.speed * game.fireBallMultiplier;
         ball.style.left = ball.x + 'px';
 
-        if(ball.x + ball.offsetWidth > gameAreaElement.offsetWidth){
+        if (ball.x + ball.offsetWidth > gameAreaElement.offsetWidth) {
             ball.parentElement.removeChild(ball);
+        }
+    });
+
+    // add clouds
+    if (timestamp - scene.lastClouldSpawn > game.clouldSpawnInterval + 20000 * Math.random()) {
+        const cloud = document.createElement('div');
+        cloud.classList.add('cloud');
+        cloud.x = gameAreaElement.offsetWidth - 200;
+        cloud.style.left = cloud.x + 'px';
+        cloud.style.top = (gameAreaElement.offsetHeight - 200) * Math.random() + 'px';
+        gameAreaElement.appendChild(cloud);
+        scene.lastClouldSpawn = timestamp;
+    }
+    // add clouds movement
+    let clouds = document.querySelectorAll('.cloud');
+    clouds.forEach(cloud => {
+        cloud.x -= game.speed;
+        cloud.style.left = cloud.x + 'px';
+
+        if (cloud.x + cloud.offsetWidth <= 0) {
+            cloud.parentElement.removeChild(cloud);
         }
     });
 
@@ -103,7 +128,7 @@ function GameAction(timestamp) {
     window.requestAnimationFrame(GameAction);
 }
 
-function addFireBall(player){
+function addFireBall(player) {
     let fireBall = document.createElement('div');
     fireBall.classList.add('fire-ball');
 
@@ -113,6 +138,8 @@ function addFireBall(player){
 
     gameAreaElement.appendChild(fireBall);
 }
+
+
 
 
 
